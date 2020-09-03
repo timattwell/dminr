@@ -1,0 +1,40 @@
+# SemEval2010T8
+Task 8 of SemEval 2010 asked for methods for the multi-way classification of mutually exclusive semantic relations between pairs of nominals. That is - given a sentence and two tagged nominals, predict the relation between them and the direction of that relation. Notes are contained on a few methods used in this task, containing **RNN**, **CNN** and **BERT** based models. Discussion will begin with the simplest and weakest **RNN** based, and move though to the stongest performing **BERT** based transformer models.
+
+## RNN-based Models
+### Lee, Seo, Choi - Semantic Relation Classification via Bidirectional LSTM Networks with Entity-aware Attention using Latent Entity Typing (2019)
+- Begins by noting the reliance on high-level lexical and syntatic features used by previous models.
+- Attention based models do not fully utilize entity information that may be crucial for classification.
+- Proposal is a novel end-to-end RNN incoperating an entity-aware attention mechanism with a latent entity typing (LET) method.
+    - Utilises entities and their latent types as features.
+    - More interpretable by visualising attention mechanisms and LET results.
+- Results demonstrate model outperforms state of the art methods that rely on high-level features.
+
+#### Introduction
+- Methods which rely on high-level features obtained from NLP tools suffer from propagation of implicit error of the tools and are computationally expenesive.
+- While attention based models have given good results, as they were proposed for translation and language modelling tasks, they cannot utilise the information of tagged entities in relation classification. Tagged entity pairs can give powerful hints.
+    > Crash and Attack - *Cause-Effect* (intuitively) but may be classified as *Component-Whole*
+- To capture sentence context, obtain word representations by self attention mechanisms, and build Bidirectional LSTM network architecture. Entity-aware attention focuses on the most important semantic information considering entity pairs, relative word positions, and latent types obtained by LET.
+
+#### Model
+As seen in the figure, model consists of four main components:
+1. Word Representation - maps each word in sentence to vector representation.
+2. Self Attention - captures the meaning of the correlation between words using multi-head attention.
+3. BLSTM - sequentially encodesthe representations of self attention layer.
+4. Entity-aware Attention - calculates attention weights with respect to entity pair, reletive word positions and latent types obtained by LET. Features are then averaged along the time steps to produce sentence-level features.
+
+##### 1. Word Representation
+- Let an input sequence be denoted $S = \{w_{1}, w_{2}, ..., w_{n}\}$, where n is the number of words. 
+- Then transform each word into vector representations by looking up word embedding matrix $W_{word} \in \mathbb{R}^{d_{w} \times V}, where $d_{w} is dimention of the vector and V is size of vocab. 
+- Then word representations $X = \{x_{1}, x_{2}, ..., x_{n}\} are obtained by mapping w_{i}, the *i*-th word, to column vector $x_{i} \in \mathbb{R}^{d_{w}}$ are fed into the next later
+##### 2. Self Attention
+- In order for representation vectors to capture meaning of words in contex, multi-head, self-attention is used.
+##### 3. Bidirectional LSTM Network
+- Self explanatory
+##### 4. Entity-aware Attention Mechanism
+- Uses prior knowlege to provide additional information about entities along with sentence.
+- Entity-aware attention utilises the two additional features except $H$ (set of hidden timesets). These are relative position features, and entiry features with LET. The final sentece representation $z$ resutling from the attention is computed as:
+$$ u_{i} = tanh(W^{H}\[h_{i};p_\[i\]^{e_{1}};p_{i}^{e_{2}}\] + W^{E}\[h_{e_{1}};t_{1};h_{e_{2}};t_{2}\])$$
+
+
+
