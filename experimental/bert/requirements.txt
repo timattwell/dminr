@@ -1,0 +1,15 @@
+torch
+torchvision
+tensorboard
+scipy
+numpy
+tqdm
+torchtext
+spacy
+pandas
+transformers
+keras
+tensorflow
+sklearn
+seqeval
+torchtext
