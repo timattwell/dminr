@@ -339,17 +339,17 @@ def infer_entities(test_sentence):
         else:
             new_labels.append(tag_values[label_idx])
             new_tokens.append(token)
-    savetoken=''
-    savelabel=''
+    savetoken=' '
+    savelabel=' '
     dict = {"token":[], "label":[]}
     for token, label in zip(new_tokens, new_labels):
         print("{}\t{}".format(label, token))
         
-        if (label[0] != 'I') & (savelabel != ''):
+        if (label[0] != 'I') & (savelabel != ' '):
             dict["token"].append(savetoken)
             dict["label"].append(savelabel[2:])
-            savetoken=''
-            savelabel=''
+            savetoken=' '
+            savelabel=' '
         if savelabel[0] == 'B':
             savetoken = token
             savelabel = label    
