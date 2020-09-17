@@ -106,7 +106,6 @@ def tokenize_and_preserve_labels(sentence, text_labels):
     return tokenized_sentence, labels
 
 
-print("Tokenising. Please wait...")
 tokenized_texts_and_labels = [
     tokenize_and_preserve_labels(sent, labs)
     for sent, labs in tqdm(zip(sentences, labels),desc="Tokenising")
@@ -114,7 +113,7 @@ tokenized_texts_and_labels = [
 
 # Splits things back up again - this time with byte piece
 tokenized_texts = [token_label_pair[0] for token_label_pair in tokenized_texts_and_labels]
-labels_1 = [token_label_pair[1] for token_label_pair in tokenized_texts_and_labels]
+labels = [token_label_pair[1] for token_label_pair in tokenized_texts_and_labels]
 
 #print(tokenized_texts[9994])
 #print(labels[9994])
