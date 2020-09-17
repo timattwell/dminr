@@ -350,9 +350,9 @@ def infer_entities(test_sentence):
             dict["label"].append(savelabel[2:])
             savetoken=''
             savelabel=''
-            if savelabel[0] == 'B':
-                savetoken = token
-                savelabel = label
+        if savelabel[0] == 'B':
+            savetoken = token
+            savelabel = label    
         elif label[0] == 'I':
             savetoken = savetoken+' '+token
         
