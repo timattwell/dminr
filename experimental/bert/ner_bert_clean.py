@@ -32,52 +32,51 @@ if torch.cuda.is_available():
 print("Loading BERT tokeniser.")
 tokenizer = BertTokenizer.from_pretrained('bert-'+model_size+'-cased', do_lower_case=False)
 
-if should_train == True:
-    # Load in previous dataset
-    print("Loading in dataset. Please wait...")
-    data = pd.read_csv(".data/ner_dataset.csv", encoding="latin1").fillna(method="ffill")
-    data.tail(10)
+# Load in previous dataset
+print("Loading in dataset. Please wait...")
+data = pd.read_csv(".data/ner_dataset.csv", encoding="latin1").fillna(method="ffill")
+data.tail(10)
 
-    class SentenceGetter(object):
-        def __init__(self, data):
-            self.n_sent = 1
-            self.data = data
-            self.empty = False
-            #print(data)
-            # groups each sentence, and within that sentence, each word with it's POS and Tag)
-            agg_func = lambda s: [(w, p, t) for w, p, t in zip(s["Word"].values.tolist(),
-                                                            s["POS"].values.tolist(),
-                                                            s["Tag"].values.tolist())]
-            self.grouped = self.data.groupby("Sentence #").apply(agg_func)
-            self.sentences = [s for s in self.grouped]
-            #print(self.grouped)
-        def get_next(self):
-            try:
-                s = self.grouped["Sentence: {}".format(self.n_sent)]
-                self.n_sent += 1
-                return s
-            except:
-                return None
+class SentenceGetter(object):
+    def __init__(self, data):
+        self.n_sent = 1
+        self.data = data
+        self.empty = False
+        #print(data)
+        # groups each sentence, and within that sentence, each word with it's POS and Tag)
+        agg_func = lambda s: [(w, p, t) for w, p, t in zip(s["Word"].values.tolist(),
+                                                        s["POS"].values.tolist(),
+                                                        s["Tag"].values.tolist())]
+        self.grouped = self.data.groupby("Sentence #").apply(agg_func)
+        self.sentences = [s for s in self.grouped]
+        #print(self.grouped)
+    def get_next(self):
+        try:
+            s = self.grouped["Sentence: {}".format(self.n_sent)]
+            self.n_sent += 1
+            return s
+        except:
+            return None
 
-    getter = SentenceGetter(data)
+getter = SentenceGetter(data)
 
-    sentences = [[word[0] for word in sentence] for sentence in getter.sentences]
-    #print(sentences[0])
+sentences = [[word[0] for word in sentence] for sentence in getter.sentences]
+#print(sentences[0])
 
-    labels = [[label[2] for label in sentence] for sentence in getter.sentences]
-    #print(labels[0])
+labels = [[label[2] for label in sentence] for sentence in getter.sentences]
+#print(labels[0])
 
-    print("Finding and sorting [TAG] values...")
-    tag_values = sorted(list(set(data["Tag"].values)))
-    tag_values.append("PAD")
-    tag2idx = {t: i for i, t in enumerate(tag_values)}
-    #print(tag_values)
-    #print(tag_values)
-    # Apply Bert
-    # Prepare sentences and labels
+print("Finding and sorting [TAG] values...")
+tag_values = sorted(list(set(data["Tag"].values)))
+tag_values.append("PAD")
+tag2idx = {t: i for i, t in enumerate(tag_values)}
+#print(tag_values)
+#print(tag_values)
+# Apply Bert
+# Prepare sentences and labels
 
     #print(torch.__version__)
-
+if should_train == True:
     MAX_LEN = 75
     bs = 32
 
