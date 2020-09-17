@@ -341,13 +341,13 @@ def infer_entities(test_sentence):
             new_tokens.append(token)
     savetoken=' '
     savelabel=' '
-    dict = {"token":[], "label":[]}
+    mydict = {"token": [], "label": []}
     for token, label in zip(new_tokens, new_labels):
         print("{}\t{}".format(label, token))
         
         if (label[0] != 'I') & (savelabel != ' '):
-            dict["token"].append(savetoken)
-            dict["label"].append(savelabel[2:])
+            mydict["token"].append(savetoken)
+            mydict["label"].append(savelabel[2:])
             savetoken=' '
             savelabel=' '
         if savelabel[0] == 'B':
@@ -356,7 +356,7 @@ def infer_entities(test_sentence):
         elif label[0] == 'I':
             savetoken = savetoken+' '+token
         
-    print(dict)
+    print(mydict)
 
     
 
