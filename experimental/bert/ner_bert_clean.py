@@ -62,13 +62,13 @@ print("Finding and sorting [TAG] values...")
 tag_values = sorted(list(set(data["Tag"].values)))
 tag_values.append("PAD")
 tag2idx = {t: i for i, t in enumerate(tag_values)}
-print(tag_values)
+#print(tag_values)
 #print(tag_values)
 # Apply Bert
 # Prepare sentences and labels
 
 #print(torch.__version__)
-input()
+
 MAX_LEN = 75
 bs = 32
 
@@ -302,6 +302,7 @@ if should_train == True:
     model.save_pretrained('./data'+model_size+'/')
 else:
     model = BertForTokenClassification.from_pretrained('./data'+model_size+'/')
+    model.to(device)
 
 test_sentence = """ Mr. Trump’s tweets began just moments after a Fox News report by Mike Tobin, a reporter for the network, about protests in Minnesota and elsewhere. """
 
