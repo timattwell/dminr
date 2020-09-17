@@ -343,7 +343,7 @@ def infer_entities(test_sentence):
     for token, label in zip(new_tokens, new_labels):
         print("{}\t{}".format(label, token))
 
-cont == True
+cont = True
 while cont == True:
     test_sentence = input("Please give us a sentence: ")
     if test_sentence == "q":
