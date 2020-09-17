@@ -17,6 +17,8 @@ from transformers import get_linear_schedule_with_warmup
 
 from seqeval.metrics import f1_score, accuracy_score
 
+from .tools import save_pkl, load_pkl
+
 if True:
     model_size = 'base'
 else:
@@ -70,6 +72,10 @@ print("Finding and sorting [TAG] values...")
 tag_values = sorted(list(set(data["Tag"].values)))
 tag_values.append("PAD")
 tag2idx = {t: i for i, t in enumerate(tag_values)}
+
+save_pkl(tag_values, './.data/tag_values.pkl')
+save_pkl(tag2idx, './.data/tag2idx.pkl')
+
 #print(tag_values)
 #print(tag_values)
 # Apply Bert
@@ -311,6 +317,8 @@ if should_train == True:
 else:
     model = BertForTokenClassification.from_pretrained('./data'+model_size+'/')
     model.to(device)
+    tag_values = load_pkl('./.data/tag_values.pkl')
+    tag2idx = load_pkl('./.data/tag2idx.pkl')
 
 test_sentence = """ Mr. Trump’s tweets began just moments after a Fox News report by Mike Tobin, a reporter for the network, about protests in Minnesota and elsewhere. """
 
