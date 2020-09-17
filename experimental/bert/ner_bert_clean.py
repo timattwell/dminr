@@ -62,12 +62,13 @@ print("Finding and sorting [TAG] values...")
 tag_values = sorted(list(set(data["Tag"].values)))
 tag_values.append("PAD")
 tag2idx = {t: i for i, t in enumerate(tag_values)}
+print(tag_values)
 #print(tag_values)
 # Apply Bert
 # Prepare sentences and labels
 
 #print(torch.__version__)
-
+input()
 MAX_LEN = 75
 bs = 32
 
@@ -108,7 +109,7 @@ def tokenize_and_preserve_labels(sentence, text_labels):
 print("Tokenising. Please wait...")
 tokenized_texts_and_labels = [
     tokenize_and_preserve_labels(sent, labs)
-    for sent, labs in zip(sentences, labels)
+    for sent, labs in tqdm(zip(sentences, labels),desc="Tokenising")
 ]
 
 # Splits things back up again - this time with byte piece
