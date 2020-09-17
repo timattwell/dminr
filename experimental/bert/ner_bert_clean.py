@@ -22,117 +22,118 @@ if True:
 else:
     model_size = 'large'
 
-should_train = True
+should_train = False
 
-# Load in previous dataset
-print("Loading in dataset. Please wait...")
-data = pd.read_csv(".data/ner_dataset.csv", encoding="latin1").fillna(method="ffill")
-data.tail(10)
+if should_train == True:
+    # Load in previous dataset
+    print("Loading in dataset. Please wait...")
+    data = pd.read_csv(".data/ner_dataset.csv", encoding="latin1").fillna(method="ffill")
+    data.tail(10)
 
-class SentenceGetter(object):
-    def __init__(self, data):
-        self.n_sent = 1
-        self.data = data
-        self.empty = False
-        #print(data)
-        # groups each sentence, and within that sentence, each word with it's POS and Tag)
-        agg_func = lambda s: [(w, p, t) for w, p, t in zip(s["Word"].values.tolist(),
-                                                        s["POS"].values.tolist(),
-                                                        s["Tag"].values.tolist())]
-        self.grouped = self.data.groupby("Sentence #").apply(agg_func)
-        self.sentences = [s for s in self.grouped]
-        #print(self.grouped)
-    def get_next(self):
-        try:
-            s = self.grouped["Sentence: {}".format(self.n_sent)]
-            self.n_sent += 1
-            return s
-        except:
-            return None
+    class SentenceGetter(object):
+        def __init__(self, data):
+            self.n_sent = 1
+            self.data = data
+            self.empty = False
+            #print(data)
+            # groups each sentence, and within that sentence, each word with it's POS and Tag)
+            agg_func = lambda s: [(w, p, t) for w, p, t in zip(s["Word"].values.tolist(),
+                                                            s["POS"].values.tolist(),
+                                                            s["Tag"].values.tolist())]
+            self.grouped = self.data.groupby("Sentence #").apply(agg_func)
+            self.sentences = [s for s in self.grouped]
+            #print(self.grouped)
+        def get_next(self):
+            try:
+                s = self.grouped["Sentence: {}".format(self.n_sent)]
+                self.n_sent += 1
+                return s
+            except:
+                return None
 
-getter = SentenceGetter(data)
+    getter = SentenceGetter(data)
 
-sentences = [[word[0] for word in sentence] for sentence in getter.sentences]
-#print(sentences[0])
+    sentences = [[word[0] for word in sentence] for sentence in getter.sentences]
+    #print(sentences[0])
 
-labels = [[label[2] for label in sentence] for sentence in getter.sentences]
-#print(labels[0])
+    labels = [[label[2] for label in sentence] for sentence in getter.sentences]
+    #print(labels[0])
 
-print("Finding and sorting [TAG] values...")
-tag_values = sorted(list(set(data["Tag"].values)))
-tag_values.append("PAD")
-tag2idx = {t: i for i, t in enumerate(tag_values)}
-#print(tag_values)
-#print(tag_values)
-# Apply Bert
-# Prepare sentences and labels
+    print("Finding and sorting [TAG] values...")
+    tag_values = sorted(list(set(data["Tag"].values)))
+    tag_values.append("PAD")
+    tag2idx = {t: i for i, t in enumerate(tag_values)}
+    #print(tag_values)
+    #print(tag_values)
+    # Apply Bert
+    # Prepare sentences and labels
 
-#print(torch.__version__)
+    #print(torch.__version__)
 
-MAX_LEN = 75
-bs = 32
+    MAX_LEN = 75
+    bs = 32
 
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-n_gpu = torch.cuda.device_count()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    n_gpu = torch.cuda.device_count()
 
-if torch.cuda.is_available():
-    print(torch.cuda.get_device_name(0))
-print("Loading BERT tokeniser.")
-tokenizer = BertTokenizer.from_pretrained('bert-'+model_size+'-cased', do_lower_case=False)
+    if torch.cuda.is_available():
+        print(torch.cuda.get_device_name(0))
+    print("Loading BERT tokeniser.")
+    tokenizer = BertTokenizer.from_pretrained('bert-'+model_size+'-cased', do_lower_case=False)
 
-# Now we tokenize all sentences. Since the BERT tokenizer is based a Wordpiece 
-# tokenizer it will split tokens in subword tokens. For example ‘gunships’ will 
-# be split in the two tokens ‘guns’ and ‘##hips’. We have to deal with the issue 
-# of splitting our token-level labels to related subtokens. In practice you would 
-# solve this by a specialized data structure based on label spans, but for 
-# simplicity I do it explicitly here.
+    # Now we tokenize all sentences. Since the BERT tokenizer is based a Wordpiece 
+    # tokenizer it will split tokens in subword tokens. For example ‘gunships’ will 
+    # be split in the two tokens ‘guns’ and ‘##hips’. We have to deal with the issue 
+    # of splitting our token-level labels to related subtokens. In practice you would 
+    # solve this by a specialized data structure based on label spans, but for 
+    # simplicity I do it explicitly here.
 
-def tokenize_and_preserve_labels(sentence, text_labels):
-    tokenized_sentence = []
-    labels = []
+    def tokenize_and_preserve_labels(sentence, text_labels):
+        tokenized_sentence = []
+        labels = []
 
-    for word, label in zip(sentence, text_labels):
+        for word, label in zip(sentence, text_labels):
 
-        # Tokenize the word and count # of subwords the word is broken into
-        tokenized_word = tokenizer.tokenize(word)
-        n_subwords = len(tokenized_word)
+            # Tokenize the word and count # of subwords the word is broken into
+            tokenized_word = tokenizer.tokenize(word)
+            n_subwords = len(tokenized_word)
 
-        # Add the tokenized word to the final tokenized word list
-        tokenized_sentence.extend(tokenized_word)
+            # Add the tokenized word to the final tokenized word list
+            tokenized_sentence.extend(tokenized_word)
 
-        # Add the same label to the new list of labels `n_subwords` times
-        labels.extend([label] * n_subwords)
+            # Add the same label to the new list of labels `n_subwords` times
+            labels.extend([label] * n_subwords)
 
-    return tokenized_sentence, labels
+        return tokenized_sentence, labels
 
 
-tokenized_texts_and_labels = [
-    tokenize_and_preserve_labels(sent, labs)
-    for sent, labs in tqdm(zip(sentences, labels),desc="Tokenising")
-]
+    tokenized_texts_and_labels = [
+        tokenize_and_preserve_labels(sent, labs)
+        for sent, labs in tqdm(zip(sentences, labels),desc="Tokenising")
+    ]
 
-# Splits things back up again - this time with byte piece
-tokenized_texts = [token_label_pair[0] for token_label_pair in tokenized_texts_and_labels]
-labels = [token_label_pair[1] for token_label_pair in tokenized_texts_and_labels]
+    # Splits things back up again - this time with byte piece
+    tokenized_texts = [token_label_pair[0] for token_label_pair in tokenized_texts_and_labels]
+    labels = [token_label_pair[1] for token_label_pair in tokenized_texts_and_labels]
 
-#print(tokenized_texts[9994])
-#print(labels[9994])
-#print(labels_1[9994])
+    #print(tokenized_texts[9994])
+    #print(labels[9994])
+    #print(labels_1[9994])
 
-# Now pad - from keras
-input_ids = pad_sequences([tokenizer.convert_tokens_to_ids(txt) for txt in tokenized_texts],
-                          maxlen=MAX_LEN, dtype="long", value=0.0,
-                          truncating="post", padding="post")
+    # Now pad - from keras
+    input_ids = pad_sequences([tokenizer.convert_tokens_to_ids(txt) for txt in tokenized_texts],
+                            maxlen=MAX_LEN, dtype="long", value=0.0,
+                            truncating="post", padding="post")
 
-tags = pad_sequences([[tag2idx.get(l) for l in lab] for lab in labels],
-                     maxlen=MAX_LEN, value=tag2idx["PAD"], padding="post",
-                     dtype="long", truncating="post")
+    tags = pad_sequences([[tag2idx.get(l) for l in lab] for lab in labels],
+                        maxlen=MAX_LEN, value=tag2idx["PAD"], padding="post",
+                        dtype="long", truncating="post")
 
     #print(tokenized_texts[9994])
     #print(tokenizer.convert_tokens_to_ids(tokenized_texts[9994]))
     #print(input_ids[9994])
 
-if should_train == True:
+#if should_train == True:
     ## attention mask stuff -  masks padding
     attention_masks = [[float(i != 0.0) for i in ii] for ii in input_ids]
 
