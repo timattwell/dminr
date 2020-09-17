@@ -24,6 +24,14 @@ else:
 
 should_train = False
 
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+n_gpu = torch.cuda.device_count()
+
+if torch.cuda.is_available():
+    print(torch.cuda.get_device_name(0))
+print("Loading BERT tokeniser.")
+tokenizer = BertTokenizer.from_pretrained('bert-'+model_size+'-cased', do_lower_case=False)
+
 if should_train == True:
     # Load in previous dataset
     print("Loading in dataset. Please wait...")
