@@ -339,6 +339,7 @@ def infer_entities(test_sentence):
         else:
             new_labels.append(tag_values[label_idx])
             new_tokens.append(token)
+    savetoken=''
     savelabel=''
     dict = {"token":[], "label":[]}
     for token, label in zip(new_tokens, new_labels):
