@@ -344,7 +344,7 @@ def infer_entities(test_sentence):
     for token, label in zip(new_tokens, new_labels):
         print("{}\t{}".format(label, token))
         
-        if label[0] != 'I' & savelabel != '':
+        if (label[0] != 'I') & (savelabel != ''):
             dict["token"].append(savetoken)
             dict["label"].append(savelabel[2:])
             savetoken=''
