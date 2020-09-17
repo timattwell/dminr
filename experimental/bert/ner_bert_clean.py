@@ -327,3 +327,4 @@ def infer_entities(test_sentence):
         print("{}\t{}".format(label, token))
 
 
+infer_entities(test_sentence)
