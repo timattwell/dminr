@@ -355,6 +355,7 @@ def infer_entities(test_sentence):
             savelabel = label    
         elif label[0] == 'I':
             savetoken = savetoken+' '+token
+            savelabel = label
         
     print(mydict)
 
