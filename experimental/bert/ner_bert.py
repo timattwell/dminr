@@ -408,7 +408,7 @@ while cont == True:
 
         def take_second(elem):
             return elem[1]
-        pairs = str(sorted(list(set(zip(art_ents, wordfreq))),key=take_second,reverse=True)))
+        pairs = str(sorted(list(set(zip(art_ents, wordfreq))),key=take_second,reverse=True))
         for pair in pairs:
             print(pair)
 
