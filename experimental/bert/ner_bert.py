@@ -381,21 +381,23 @@ while cont == True:
             def get_url(q, begin_date, end_date, page):
                 url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&page="+page+"&api-key="+nyt_key
                 return url
-            try:
-                r = requests.get(get_url(q, '20000101', '20201809',str(p)))
+            
+            r = requests.get(get_url(q, '20000101', '20201809',str(p)))
 
-                json_data = r.json()#['response']['docs']
-                #print(json_data)
-            except:
-                print("Unable to get data from page "+str(p))
-                print(json_data)
-                with open('nyt.json','w') as outfile:
-                    json.dump(json_data, outfile, indent=4)
+            json_data = r.json()#['response']['docs']
+            #print(json_data)
+
+            with open('nyt.json','w') as outfile:
+                json.dump(json_data, outfile, indent=4)
             
             art_ents = []
-            for article in r.json()['response']['docs']:
-                art_ents.extend(infer_entities(article['abstract'][:511])["token"])
-                c=c+1
+            try:
+                for article in r.json()['response']['docs']:
+                    art_ents.extend(infer_entities(article['abstract'][:511])["token"])
+                    c=c+1
+            except:
+                print("Could not get data.")
+                print(r.json())
 
         wordfreq = []
         for w in art_ents:
