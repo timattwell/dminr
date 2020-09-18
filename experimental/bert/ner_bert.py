@@ -345,7 +345,7 @@ def infer_entities(test_sentence):
     savelabel=' '
     mydict = {"token": [], "label": []}
     for token, label in zip(new_tokens, new_labels):
-        print("{}\t{}".format(label, token))
+        #print("{}\t{}".format(label, token))
         
         if (label[0] != 'I') & (savelabel != ' '):
             mydict["token"].append(savetoken)
@@ -359,7 +359,8 @@ def infer_entities(test_sentence):
             savetoken = savetoken+' '+token
             savelabel = label
         
-    print(mydict)
+    #print(mydict)
+    return(mydict)
 
     
 import requests
@@ -386,6 +387,17 @@ while cont == True:
 
         with open('nyt.json','w') as outfile:
             json.dump(json_data, outfile, indent=4)
-
+        
+        art_ents = []
         for article in r.json()['response']['docs']:
-            infer_entities(article['abstract'])
+            art_ents.extend(infer_entities(article['abstract'])["token"])
+
+        wordfreq = []
+        for w in art_ents:
+            wordfreq.append(art_ents.count(w))
+
+        print("Pairs\n" + str(list(zip(art_ents, wordfreq))))
+
+
+
+
