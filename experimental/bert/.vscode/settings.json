@@ -8,5 +8,7 @@
     ],
     "python.testing.pytestEnabled": false,
     "python.testing.nosetestsEnabled": false,
-    "python.testing.unittestEnabled": true
+    "python.testing.unittestEnabled": false,
+    "python.testing.promptToConfigure": false,
+    "python.pythonPath": "/home/tim/anaconda3/bin/python"
 }

@@ -363,34 +363,30 @@ def infer_entities(test_sentence):
     print(mydict)
 
     
-
-cont = True
-while cont == True:
-    test_sentence = input("Please give us a sentence: ")
-    if test_sentence == "q":
-        cont = False
-        print("Thank you for using Ner_bert.")
-    else:
-        infer_entities(test_sentence)
-
 import requests
 import json
 #from extract import json_extract
+cont = True
+while cont == True:
+    q = input("What do you want to search for? ")
+    if q == "q":
+        cont = False
+        print("Thank you for using Ner_bert.")
+    else:
+        nyt_key = 'iFzGeWsfQAExVFhBG5ZtcckhVP0CAjmO'#+'Y4eEsEg01aVjGURF'
+        nyt_key_ = '9qVEPvGsY2GT0IIrndQp8LfCmOIZWvYW'
+        #
+        def get_url(q, begin_date, end_date):
+            url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&api-key="+nyt_key
+            return url
 
-nyt_key = 'iFzGeWsfQAExVFhBG5ZtcckhVP0CAjmO'#+'Y4eEsEg01aVjGURF'
-nyt_key_ = '9qVEPvGsY2GT0IIrndQp8LfCmOIZWvYW'
-#
-def get_url(q, begin_date, end_date):
-    url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&api-key="+nyt_key
-    return url
+        r = requests.get(get_url(q, '20000101', '20200101'))
 
-r = requests.get(get_url('trump', '20081201', '20090101'))
+        json_data = r.json()#['response']['docs']
+        #print(json_data)
 
-json_data = r.json()#['response']['docs']
-#print(json_data)
+        with open('nyt.json','w') as outfile:
+            json.dump(json_data, outfile, indent=4)
 
-with open('nyt.json','w') as outfile:
-    json.dump(json_data, outfile, indent=4)
-
-for article in r.json()['response']['docs']:
-    infer_entities(article['abstract'])
+        for article in r.json()['response']['docs']:
+            infer_entities(article['abstract'])
