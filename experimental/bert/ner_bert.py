@@ -382,7 +382,7 @@ while cont == True:
                 url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&page="+page+"&api-key="+nyt_key
                 return url
 
-            r = requests.get(get_url(q, '20000101', '20200101',str(p)))
+            r = requests.get(get_url(q, '20000101', '20201809',str(p)))
 
             json_data = r.json()#['response']['docs']
             #print(json_data)
