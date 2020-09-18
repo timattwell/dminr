@@ -376,6 +376,7 @@ while cont == True:
         nyt_key = 'iFzGeWsfQAExVFhBG5ZtcckhVP0CAjmO'#+'Y4eEsEg01aVjGURF'
         nyt_key_ = '9qVEPvGsY2GT0IIrndQp8LfCmOIZWvYW'
         #
+        c=0
         for p in range(10):
             def get_url(q, begin_date, end_date, page):
                 url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&page="+page+"&api-key="+nyt_key
@@ -391,7 +392,8 @@ while cont == True:
             
             art_ents = []
             for article in r.json()['response']['docs']:
-                art_ents.extend(infer_entities(article['abstract'][:512])["token"])
+                art_ents.extend(infer_entities(article['abstract'][:511])["token"])
+                c=c+1
 
         wordfreq = []
         for w in art_ents:
@@ -400,7 +402,7 @@ while cont == True:
         def take_second(elem):
             return elem[1]
         print("Pairs\n" + str(sorted(list(set(zip(art_ents, wordfreq))),key=take_second,reverse=True)))
-
+        print("Found over "+c+" articles.")
 
 
 
