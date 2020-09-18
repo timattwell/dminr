@@ -391,7 +391,7 @@ while cont == True:
             
             art_ents = []
             for article in r.json()['response']['docs']:
-                art_ents.extend(infer_entities(article['abstract'])["token"])
+                art_ents.extend(infer_entities(article['abstract'][:512])["token"])
 
         wordfreq = []
         for w in art_ents:
