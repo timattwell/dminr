@@ -378,6 +378,7 @@ while cont == True:
         #
         c=0
         art_ents = []
+        art_label = []
         for p in range(10):
             def get_url(q, begin_date, end_date, page):
                 url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&page="+page+"&api-key="+nyt_key
@@ -393,7 +394,9 @@ while cont == True:
             
             try:
                 for article in r.json()['response']['docs']:
-                    art_ents.extend(infer_entities(article['snippet'][:511])["token"])
+                    art = infer_entities(article['snippet'][:511])
+                    art_ents.extend(art["token"])
+                    art_label.extend(art["label"])
                     c=c+1
             except:
                 print("Could not get data.")
@@ -405,7 +408,7 @@ while cont == True:
 
         def take_second(elem):
             return elem[1]
-        print("Pairs\n" + str(sorted(list(set(zip(art_ents, wordfreq))),key=take_second,reverse=True)))
+        print("Pairs\n" + str(sorted(list(set(zip(art_ents, art_label wordfreq))),key=take_second,reverse=True)))
         print("Found over "+str(c)+" articles.")
 
 
