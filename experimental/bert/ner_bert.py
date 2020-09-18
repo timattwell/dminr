@@ -408,7 +408,7 @@ while cont == True:
 
         def take_second(elem):
             return elem[1]
-        print("Pairs\n" + str(sorted(list(set(zip(art_ents, art_label wordfreq))),key=take_second,reverse=True)))
+        print("Pairs\n" + str(sorted(list(set(zip(art_ents, art_label, wordfreq))),key=take_second,reverse=True)))
         print("Found over "+str(c)+" articles.")
 
 
