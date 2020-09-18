@@ -395,8 +395,9 @@ while cont == True:
         wordfreq = []
         for w in art_ents:
             wordfreq.append(art_ents.count(w))
-
-        print("Pairs\n" + str(list(zip(art_ents, wordfreq))))
+        def take_second(elem):
+            return elem[1]
+        print("Pairs\n" + str(sorted(list(set(zip(art_ents, wordfreq))),key=take_second)))
 
 
 
