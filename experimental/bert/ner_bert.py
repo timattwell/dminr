@@ -1,3 +1,4 @@
+
 # Imports
 import pandas as pd
 import numpy as np
@@ -19,6 +20,7 @@ from seqeval.metrics import f1_score, accuracy_score
 
 from tools import save_pkl, load_pkl
 
+def model_start():
 if True:
     model_size = 'base'
 else:
@@ -322,6 +324,7 @@ else:
 
 test_sentence = """ Mr. Trump’s tweets began just moments after a Fox News report by Mike Tobin, a reporter for the network, about protests in Minnesota and elsewhere. """
 
+
 def infer_entities(test_sentence):
     tokenized_sentence = tokenizer.encode(test_sentence)
     input_ids = torch.tensor([tokenized_sentence]).cuda()
@@ -369,3 +372,25 @@ while cont == True:
         print("Thank you for using Ner_bert.")
     else:
         infer_entities(test_sentence)
+
+import requests
+import json
+#from extract import json_extract
+
+nyt_key = 'iFzGeWsfQAExVFhBG5ZtcckhVP0CAjmO'#+'Y4eEsEg01aVjGURF'
+nyt_key_ = '9qVEPvGsY2GT0IIrndQp8LfCmOIZWvYW'
+#
+def get_url(q, begin_date, end_date):
+    url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&api-key="+nyt_key
+    return url
+
+r = requests.get(get_url('trump', '20081201', '20090101'))
+
+json_data = r.json()#['response']['docs']
+#print(json_data)
+
+with open('nyt.json','w') as outfile:
+    json.dump(json_data, outfile, indent=4)
+
+for article in r.json()['response']['docs']:
+    infer_entities(article['abstract'])
