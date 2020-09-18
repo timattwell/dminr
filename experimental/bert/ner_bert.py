@@ -376,21 +376,22 @@ while cont == True:
         nyt_key = 'iFzGeWsfQAExVFhBG5ZtcckhVP0CAjmO'#+'Y4eEsEg01aVjGURF'
         nyt_key_ = '9qVEPvGsY2GT0IIrndQp8LfCmOIZWvYW'
         #
-        def get_url(q, begin_date, end_date):
-            url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&api-key="+nyt_key
-            return url
+        for p in range(10):
+            def get_url(q, begin_date, end_date, page):
+                url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&page="+page+"&api-key="+nyt_key
+                return url
 
-        r = requests.get(get_url(q, '20000101', '20200101'))
+            r = requests.get(get_url(q, '20000101', '20200101',str(p)))
 
-        json_data = r.json()#['response']['docs']
-        #print(json_data)
+            json_data = r.json()#['response']['docs']
+            #print(json_data)
 
-        with open('nyt.json','w') as outfile:
-            json.dump(json_data, outfile, indent=4)
-        
-        art_ents = []
-        for article in r.json()['response']['docs']:
-            art_ents.extend(infer_entities(article['abstract'])["token"])
+            with open('nyt.json','w') as outfile:
+                json.dump(json_data, outfile, indent=4)
+            
+            art_ents = []
+            for article in r.json()['response']['docs']:
+                art_ents.extend(infer_entities(article['abstract'])["token"])
 
         wordfreq = []
         for w in art_ents:
