@@ -377,6 +377,7 @@ while cont == True:
         nyt_key_ = '9qVEPvGsY2GT0IIrndQp8LfCmOIZWvYW'
         #
         c=0
+        art_ents = []
         for p in range(10):
             def get_url(q, begin_date, end_date, page):
                 url = "https://api.nytimes.com/svc/search/v2/articlesearch.json?q="+q+"&begin_date="+begin_date+"&end_date="+end_date+"&page="+page+"&api-key="+nyt_key
@@ -390,7 +391,6 @@ while cont == True:
             with open('nyt.json','w') as outfile:
                 json.dump(json_data, outfile, indent=4)
             
-            art_ents = []
             try:
                 for article in r.json()['response']['docs']:
                     art_ents.extend(infer_entities(article['snippet'][:511])["token"])
