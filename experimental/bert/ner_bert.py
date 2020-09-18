@@ -393,7 +393,7 @@ while cont == True:
             art_ents = []
             try:
                 for article in r.json()['response']['docs']:
-                    art_ents.extend(infer_entities(article['abstract'][:511])["token"])
+                    art_ents.extend(infer_entities(article['snippet'][:511])["token"])
                     c=c+1
             except:
                 print("Could not get data.")
