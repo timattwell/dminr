@@ -20,7 +20,6 @@ from seqeval.metrics import f1_score, accuracy_score
 
 from tools import save_pkl, load_pkl
 
-def model_start():
 if True:
     model_size = 'base'
 else:
