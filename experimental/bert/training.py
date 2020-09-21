@@ -289,7 +289,7 @@ def load_model(args):
     
     model.to(args.device)
 
-    return model_.model, (data_.tag_values, data_.tag2idx), tokenizer
+    return model, (tag_values, tag2idx), tokenizer
 
 
 '''

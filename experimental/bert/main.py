@@ -1,6 +1,7 @@
 from argparse import ArgumentParser
 #import .tools
 import training
+import query
 import torch
 
 if __name__ == "__main__":
