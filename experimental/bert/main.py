@@ -19,13 +19,13 @@ if __name__ == "__main__":
     args.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     if args.train == True:
-        model, embeddings, tokenizer = build_model(args, training_data)
+        model, embeddings, tokenizer = training.build_model(args)
 
     else:
-        model, embeddings, tokenizer = load_model(args)
+        model, embeddings, tokenizer = training.load_model(args)
 
     if args.classify == True:
-        entity_classification(model, embeddings, tokenizer)
+        query.query(args, model, embeddings, tokenizer)
 
 
 

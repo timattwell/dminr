@@ -266,7 +266,6 @@ def train(data_, model_):
         print("Validation F1-Score: {}".format(f1_score(pred_tags, valid_tags)))
         print()
 
-
 def build_model(args):
     print("Loading BERT tokeniser.")
     tokenizer = BertTokenizer.from_pretrained('bert-'+args.model_size+'-cased', do_lower_case=False)
@@ -277,7 +276,21 @@ def build_model(args):
 
     train(data_, model_)
 
+    model_.model.save_pretrained('./data'+model_.model_size+'/')
+
     return model_.model, (data_.tag_values, data_.tag2idx), tokenizer
+
+def load_model(args):
+    tokenizer = BertTokenizer.from_pretrained('bert-'+args.model_size+'-cased', do_lower_case=False)
+    model = BertForTokenClassification.from_pretrained('./data'+args.model_size+'/')
+    
+    tag_values = load_pkl('./.data/tag_values.pkl')
+    tag2idx = load_pkl('./.data/tag2idx.pkl')
+    
+    model.to(args.device)
+
+    return model_.model, (data_.tag_values, data_.tag2idx), tokenizer
+
 
 '''
 if __name__ == "__main__":
