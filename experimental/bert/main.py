@@ -8,7 +8,7 @@ if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--train", type=bool, default=False, help="True = Train, *False = Don't Train")
     parser.add_argument("--classify", type=bool, default=True, help="True = do classification task, *False = Don't do classification task")
-    parser.add_argument("--model_size", type=str, default='=large', help="""*large = BERT Large
+    parser.add_argument("--model_size", type=str, default='large', help="""*large = BERT Large
                                                                           base = BERT base""")
     parser.add_argument("--epochs", type=int, default=4, help="Define number of training epochs (*4)")
     parser.add_argument("--batch", type=int, default=32, help="Define batch size (*32)")
