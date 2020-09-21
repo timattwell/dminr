@@ -2,7 +2,7 @@ import requests
 import json
 import infering
 #from extract import json_extract
-def query(args, model, embeddings, tokenizer)
+def query(args, model, embeddings, tokenizer):
     cont = True
     while cont == True:
         q = input("What do you want to search for? ")
