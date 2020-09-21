@@ -1,0 +1,11 @@
+- main.py
+    - train
+        - import data
+        - process data
+        - train model
+        - save model / embeddings
+    - task
+        - process request
+        - import data
+        - process data
+        - save data
