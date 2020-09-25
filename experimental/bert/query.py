@@ -1,8 +1,9 @@
 import requests
 import json
-import inferring
+from inferring import EntityClassifier
 #from extract import json_extract
 def query(args, model, embeddings, tokenizer):
+    ent_clas = EntityClassifier(args, model, embeddings, tokenizer)
     cont = True
     while cont == True:
         q = input("What do you want to search for? ")
@@ -31,7 +32,7 @@ def query(args, model, embeddings, tokenizer):
                 
                 try:
                     for article in r.json()['response']['docs']:
-                        art = inferring.entity_classification(args, model, embeddings, tokenizer,article['snippet'][:511])
+                        art = ent_clas.infer_entities(article['snippet'][:511])
                         art_ents.extend(art["token"])
                         art_label.extend(art["label"])
                         c=c+1
