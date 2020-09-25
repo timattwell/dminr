@@ -24,7 +24,7 @@ class EntityClassifier():
         self.args = args
         self.tag_values = embeddings[0]
         self.tag2idx = embeddings[1]
-        self.model = BertForTokenClassification.from_pretrained('.datalarge')
+        self.model = BertForTokenClassification.from_pretrained('./datalarge/')
         self.model.to(args.device)
         self.tokenizer = tokenizer
 
