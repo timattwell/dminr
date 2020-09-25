@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 import training
 import query
 import torch
+from login import SearchTask
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -26,7 +27,10 @@ if __name__ == "__main__":
         model, embeddings, tokenizer = training.load_model(args)
 
     if args.classify == True:
-        query.query(args, model, embeddings, tokenizer)
+        task = SearchTask(args, model, embeddings, tokenizer)
+        task.recurrant_search()
+        
+        #query.query(args, model, embeddings, tokenizer)
 
 
 
