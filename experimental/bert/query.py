@@ -44,7 +44,7 @@ class SearchTask():
                 art_ents["label"].append(new_ents["label"])
             self.entities["token"].append(art_ents["token"])
             self.entities["label"].append(art_ents["label"])
-            print(" Ents: " + list(set(art_ents["token"])))
+            #print(" Ents: " + list(set(art_ents["token"])))
 
         return self.entities
 
