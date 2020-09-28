@@ -40,10 +40,10 @@ class SearchTask():
             art_ents = {"token": [], "label": []}
             for sentence in tqdm(art_list):
                 new_ents = self.ent_clas.infer_entities(sentence)
-                art_ents["token"].append(new_ents["token"])
-                art_ents["label"].append(new_ents["label"])
-            self.entities["token"].append(art_ents["token"])
-            self.entities["label"].append(art_ents["label"])
+                art_ents["token"].extend(new_ents["token"])
+                art_ents["label"].extend(new_ents["label"])
+            self.entities["token"].extend(art_ents["token"])
+            self.entities["label"].extend(art_ents["label"])
             #print(" Ents: " + list(set(art_ents["token"])))
 
         return self.entities
