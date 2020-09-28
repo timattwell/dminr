@@ -65,7 +65,7 @@ class DataImporter():
         save_pkl(self.tag_values, './data/tag_values.pkl')
         save_pkl(self.tag2idx, './data/tag2idx.pkl')
 
-    def tokenise(self, args, tokenizer):
+    def tokenise(self, tokenizer):
         def tokenize_and_preserve_labels(sentence, text_labels):
             tokenized_sentence = []
             labels = []
