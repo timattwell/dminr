@@ -19,7 +19,7 @@ class SearchTask():
                 break
             search_ents = self.search_funct(srch_trm)
 
-            print(search_ents)
+            self.print_entities()
 
     def search_funct(self, srch_trm):
         srch = requests.get(
@@ -28,7 +28,7 @@ class SearchTask():
                     "&api-key="+self.nyt_key
         )
 
-        entities = {"token": [], "label": []}
+        self.entities = {"token": [], "label": []}
 
         for article in srch.json()['response']['docs']:
             #print("Title: " + article["title"])
@@ -42,11 +42,24 @@ class SearchTask():
                 new_ents = self.ent_clas.infer_entities(sentence)
                 art_ents["token"].append(new_ents["token"])
                 art_ents["label"].append(new_ents["label"])
-            entities["token"].append(art_ents["token"])
-            entities["label"].append(art_ents["label"])
+            self.entities["token"].append(art_ents["token"])
+            self.entities["label"].append(art_ents["label"])
             print(" Ents: " + list(set(art_ents["token"])))
 
-        return entities
+        return self.entities
+
+    def print_entities(self):
+        wordfreq = []
+        for w in self.entities:
+            wordfreq.append(self.entities.count(w))
+
+        def take_second(elem):
+            return elem[1]
+        pairs = sorted(list(set(zip(self.entities, wordfreq))),key=take_second,reverse=False)
+        for pair in pairs:
+            print(pair)
+
+        print("Found over "+str(c)+" articles.")
 '''
     cont = True
     while cont == True:
