@@ -59,7 +59,7 @@ class SearchTask():
         for pair in pairs:
             print(pair)
 
-        print("Found over "+str(c)+" articles.")
+        #print("Found over "+str(c)+" articles.")
 '''
     cont = True
     while cont == True:
