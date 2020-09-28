@@ -172,7 +172,7 @@ class ModelConfig():
             num_training_steps=self.total_steps
         )
 
-def train(data_, model_):
+def train(args, data_, model_):
     print("Beginning training...")
 
     ## Store the average loss after each epoch so we can plot them.
@@ -274,7 +274,7 @@ def build_model(args):
 
     model_ = ModelConfig(args, data_) 
 
-    train(data_, model_)
+    train(args, data_, model_)
 
     model_.model.save_pretrained('./data'+model_.model_size+'/')
 
