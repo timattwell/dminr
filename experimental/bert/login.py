@@ -60,7 +60,7 @@ class SearchTask():
                     art_ents["label"].append(new_ents["label"])
                 entities["token"].append(art_ents["token"])
                 entities["label"].append(art_ents["label"])
-                print(" Ents: " + set(art_ents["token"]))
+                print(" Ents: " + list(set(art_ents["token"])))
             except:
                 print(res)
             
