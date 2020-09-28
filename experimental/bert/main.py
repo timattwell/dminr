@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 import training
 import query
 import torch
-from login import SearchTask
+
 
 if __name__ == "__main__":
     parser = ArgumentParser()
@@ -16,6 +16,8 @@ if __name__ == "__main__":
     parser.add_argument("--training_data", type=str, default="./.data/ner_dataset.csv", help="""Path to training data.
                                                                                              default=./.data/ner_dataset.csv""")
     parser.add_argument("--save_model", type=bool, default=True, help="True = Save model, *False = Save model")
+    parser.add_argument("--nyt", type=bool, default=True, help="Use the New York Times API")
+    
     args = parser.parse_args()
 
     args.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -27,10 +29,16 @@ if __name__ == "__main__":
         model, embeddings, tokenizer = training.load_model(args)
 
     if args.classify == True:
-        #task = SearchTask(args, model, embeddings, tokenizer)
-        #task.recurrant_search()
+        if args.nyt == True:
+            from query import SearchTask
+        else:
+            from query import SearchTask
         
-        query.query(args, model, embeddings, tokenizer)
+        task = SearchTask(args, model, embeddings, tokenizer)
+        
+        task.recurrant_search()
+        
+        #query.query(args, model, embeddings, tokenizer)
 
 
 
