@@ -51,11 +51,11 @@ class SearchTask():
     def print_entities(self):
         wordfreq = []
         for w in self.entities:
-            wordfreq.append(self.entities.count(w))
+            wordfreq.append(self.entities["token"].count(w))
 
         def take_second(elem):
             return elem[1]
-        pairs = sorted(list(set(zip(self.entities, wordfreq))),key=take_second,reverse=False)
+        pairs = sorted(list(set(zip(self.entities["token"], wordfreq))),key=take_second,reverse=False)
         for pair in pairs:
             print(pair)
 
