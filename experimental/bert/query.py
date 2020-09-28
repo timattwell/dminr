@@ -52,7 +52,9 @@ class SearchTask():
         wordfreq = []
         for w in self.entities:
             wordfreq.append(self.entities["token"].count(w))
-
+            
+        print(self.entities["token"])
+        print(self.entities["token"].count(w))
         def take_second(elem):
             return elem[1]
         pairs = sorted(list(set(zip(self.entities["token"], wordfreq))),key=take_second,reverse=False)
