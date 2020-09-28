@@ -27,10 +27,10 @@ if __name__ == "__main__":
         model, embeddings, tokenizer = training.load_model(args)
 
     if args.classify == True:
-        task = SearchTask(args, model, embeddings, tokenizer)
-        task.recurrant_search()
+        #task = SearchTask(args, model, embeddings, tokenizer)
+        #task.recurrant_search()
         
-        #query.query(args, model, embeddings, tokenizer)
+        query.query(args, model, embeddings, tokenizer)
 
 
 

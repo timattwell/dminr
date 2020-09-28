@@ -42,14 +42,12 @@ class SearchTask():
         srch = requests.get(url="http://localhost:8000/api/search/news?query=" +
                             srch_trm,
                             headers={"Authorization": "Bearer " + self.access})
-        #print(srch)
-        #print(srch.json())
         entities = {"token": [], "label": []}
+
         for article in srch.json()['results']:
             print("Title: " + article["title"])
             print("  URL: " + article["url"])
             print("   ID: " + article["id"])
-
             res = requests.get(url="http://localhost:9200/_search?q=" +
                             article["id"])
             try:
@@ -66,7 +64,6 @@ class SearchTask():
             except:
                 print(res)
             
-
         return entities
 
                 
