@@ -4,9 +4,8 @@ import nltk
 from inferring import EntityClassifier
 #from extract import json_extract
 
-class NYTQuery():
+class SearchTask():
     def __init__(self, args, model, embeddings, tokenizer):
-        def __init__(self, args, model, embeddings, tokenizer):
         nltk.download('punkt')
         self.ent_clas = EntityClassifier(args, model, embeddings, tokenizer)
         self.nyt_key = 'iFzGeWsfQAExVFhBG5ZtcckhVP0CAjmO'
@@ -45,7 +44,7 @@ class NYTQuery():
             entities["token"].append(art_ents["token"])
             entities["label"].append(art_ents["label"])
             print(" Ents: " + art_ents)
-            
+
         return entities
 '''
     cont = True

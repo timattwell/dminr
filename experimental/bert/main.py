@@ -32,7 +32,7 @@ if __name__ == "__main__":
         if args.nyt == True:
             from query import SearchTask
         else:
-            from query import SearchTask
+            from login import SearchTask
         
         task = SearchTask(args, model, embeddings, tokenizer)
         
