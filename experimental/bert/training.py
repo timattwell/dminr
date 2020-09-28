@@ -61,8 +61,8 @@ class DataImporter():
             self.save_data()
 
     def save_data(self):
-        save_pkl(self.tag_values, './.data/tag_values.pkl')
-        save_pkl(self.tag2idx, './.data/tag2idx.pkl')
+        save_pkl(self.tag_values, './data/tag_values.pkl')
+        save_pkl(self.tag2idx, './data/tag2idx.pkl')
 
     def tokenise(self, tokenizer):
         def tokenize_and_preserve_labels(sentence, text_labels):
@@ -91,7 +91,7 @@ class DataImporter():
         # Splits things back up again - this time with byte piece
         tokenized_texts = [token_label_pair[0] for token_label_pair in tokenized_texts_and_labels]
         labels = [token_label_pair[1] for token_label_pair in tokenized_texts_and_labels]
-
+        MAX_LEN = args.max_len
         # Now pad - from keras
         self.input_ids = pad_sequences([tokenizer.convert_tokens_to_ids(txt) for txt in tokenized_texts],
                                 maxlen=MAX_LEN, dtype="long", value=0.0,
@@ -284,8 +284,8 @@ def load_model(args):
     tokenizer = BertTokenizer.from_pretrained('bert-'+args.model_size+'-cased', do_lower_case=False)
     model = BertForTokenClassification.from_pretrained('./data'+args.model_size+'/')
     
-    tag_values = load_pkl('./.data/tag_values.pkl')
-    tag2idx = load_pkl('./.data/tag2idx.pkl')
+    tag_values = load_pkl('./data/tag_values.pkl')
+    tag2idx = load_pkl('./data/tag2idx.pkl')
     
     model.to(args.device)
 
