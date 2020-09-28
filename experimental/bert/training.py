@@ -23,6 +23,7 @@ class DataImporter():
         self.data_path = args.training_data
         self.data = pd.read_csv(self.data_path, encoding="latin1").fillna(method="ffill")
         self.data.tail(10)
+        self.args = args
         class SentenceGetter(object):
             def __init__(self, data):
                 self.n_sent = 1
@@ -64,7 +65,7 @@ class DataImporter():
         save_pkl(self.tag_values, './data/tag_values.pkl')
         save_pkl(self.tag2idx, './data/tag2idx.pkl')
 
-    def tokenise(self, tokenizer):
+    def tokenise(self, args, tokenizer):
         def tokenize_and_preserve_labels(sentence, text_labels):
             tokenized_sentence = []
             labels = []
@@ -91,7 +92,7 @@ class DataImporter():
         # Splits things back up again - this time with byte piece
         tokenized_texts = [token_label_pair[0] for token_label_pair in tokenized_texts_and_labels]
         labels = [token_label_pair[1] for token_label_pair in tokenized_texts_and_labels]
-        MAX_LEN = args.max_len
+        MAX_LEN = self.args.max_len
         # Now pad - from keras
         self.input_ids = pad_sequences([tokenizer.convert_tokens_to_ids(txt) for txt in tokenized_texts],
                                 maxlen=MAX_LEN, dtype="long", value=0.0,
@@ -105,7 +106,7 @@ class ModelConfig():
     def __init__(self, args, data):
         ## attention mask stuff -  masks padding
         self.attention_masks = [[float(i != 0.0) for i in ii] for ii in data.input_ids]
-
+        self.args = args
         # Now split the dataset - sklearn
         # dont need to save masks for
         tr_inputs, val_inputs, tr_tags, val_tags = train_test_split(data.input_ids, data.tags,
@@ -123,11 +124,11 @@ class ModelConfig():
 
         train_data = TensorDataset(tr_inputs, tr_masks, tr_tags)
         train_sampler = RandomSampler(train_data)
-        self.train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=bs)
+        self.train_dataloader = DataLoader(train_data, sampler=train_sampler, batch_size=self.args.bs)
 
         valid_data = TensorDataset(val_inputs, val_masks, val_tags)
         valid_sampler = SequentialSampler(valid_data)
-        self.valid_dataloader = DataLoader(valid_data, sampler=valid_sampler, batch_size=bs)
+        self.valid_dataloader = DataLoader(valid_data, sampler=valid_sampler, batch_size=self.args.bs)
 
         print("Loading BERT from transformers library version {}.".format(transformers.__version__))
 
