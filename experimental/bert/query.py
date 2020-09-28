@@ -1,6 +1,7 @@
 import requests
 import json
 import nltk
+from tqdm import tqdm 
 from inferring import EntityClassifier
 #from extract import json_extract
 
@@ -30,11 +31,11 @@ class SearchTask():
         entities = {"token": [], "label": []}
 
         for article in srch.json()['response']['docs']:
-            print("Title: " + article["title"])
-            print("  URL: " + article["url"])
-            print("   ID: " + article["id"])
+            #print("Title: " + article["title"])
+            #print("  URL: " + article["url"])
+            #print("   ID: " + article["id"])
 
-            sent = str(article.json())
+            sent = article
             art_list = nltk.tokenize.sent_tokenize(sent['snippet'])
             art_ents = {"token": [], "label": []}
             for sentence in tqdm(art_list):
@@ -43,7 +44,7 @@ class SearchTask():
                 art_ents["label"].append(new_ents["label"])
             entities["token"].append(art_ents["token"])
             entities["label"].append(art_ents["label"])
-            print(" Ents: " + art_ents)
+            print(" Ents: " + set(art_ents["token"]))
 
         return entities
 '''
