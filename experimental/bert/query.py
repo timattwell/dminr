@@ -54,8 +54,8 @@ class SearchTask():
         for w in self.entities["token"]:
             wordfreq.append(self.entities["token"].count(w))
             
-        print(self.entities["token"])
-        print(wordfreq)
+        #print(self.entities["token"])
+        #print(wordfreq)
         def take_second(elem):
             return elem[1]
         pairs = sorted(list(set(zip(self.entities["token"], wordfreq, self.entities["label"]))),key=take_second,reverse=False)
@@ -65,7 +65,7 @@ class SearchTask():
                    "frequency": pair[1],
                    "type":pair[2]}
             output.append(out)
-            print(out)
+            #print(out)
 
         return output
 

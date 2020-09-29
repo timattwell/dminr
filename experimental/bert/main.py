@@ -43,7 +43,7 @@ if __name__ == "__main__":
         @app.route("/predict",methods=['GET'])
         def predict():
             text = request.args.get('q')
-            print(type(text))
+            #print(type(text))
             try:
                 task.search_funct(text)
                 out = task.print_entities()
