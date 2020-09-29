@@ -47,8 +47,7 @@ class EntityClassifier():
                 new_labels.append(self.tag_values[label_idx])
                 new_tokens.append(token)
         
-        for i, j in enumerate(zip(new_tokens, new_labels)):
-            print(i+"   "+j)
+    
         savetoken=' '
         savelabel=' '
         mydict = {"token": [], "label": []}
