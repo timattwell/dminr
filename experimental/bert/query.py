@@ -20,6 +20,7 @@ class SearchTask():
             search_ents = self.search_funct(srch_trm)
 
             self.print_entities()
+            
 
     def search_funct(self, srch_trm):
         srch = requests.get(

@@ -3,6 +3,7 @@ from argparse import ArgumentParser
 import training
 import query
 import torch
+from flask import Flask, request, jsonify
 
 
 if __name__ == "__main__":
@@ -29,6 +30,8 @@ if __name__ == "__main__":
         model, embeddings, tokenizer = training.load_model(args)
 
     if args.classify == True:
+        
+        
         if args.nyt == True:
             from query import SearchTask
         else:
@@ -36,7 +39,15 @@ if __name__ == "__main__":
         
         task = SearchTask(args, model, embeddings, tokenizer)
         
-        task.recurrant_search()
+        app = Flask(__name__)
+        @app.route("/predict",methods=['POST'])
+        def predict(task):
+            text = request.json["search"]
+            out = task.search_funct(text)
+            return jsonify({"result":out})
+        
+        app.run('0.0.0.0',port=6969)
+        #task.recurrant_search()
         
         #query.query(args, model, embeddings, tokenizer)
 

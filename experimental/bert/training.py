@@ -210,7 +210,7 @@ def train(args, data_, model_):
             total_loss += loss.item()
             # Clip the norm of the gradient
             # This is to help prevent the "exploding gradients" problem.
-            torch.nn.utils.clip_grad_norm_(parameters=model_.model.parameters(), max_norm=max_grad_norm)
+            torch.nn.utils.clip_grad_norm_(parameters=model_.model.parameters(), max_norm=model_.max_grad_norm)
             # update parameters
             model_.optimizer.step()
             # Update the learning rate.
