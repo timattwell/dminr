@@ -277,7 +277,7 @@ def build_model(args):
 
     train(args, data_, model_)
 
-    model_.model.save_pretrained('./data'+model_.model_size+'/')
+    model_.model.save_pretrained('./data'+args.model_size+'/')
 
     return model_.model, (data_.tag_values, data_.tag2idx), tokenizer
 
