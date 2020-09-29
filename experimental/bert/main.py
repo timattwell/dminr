@@ -45,7 +45,9 @@ if __name__ == "__main__":
             text = request.args.get('q')
             print(type(text))
             try:
-                out = task.search_funct(text)
+                task.search_funct(text)
+                out = task.print_entities()
+
                 return jsonify({"result":out})
             except Exception as e:
                 print(e)

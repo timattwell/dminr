@@ -20,7 +20,7 @@ class SearchTask():
             search_ents = self.search_funct(srch_trm)
 
             self.print_entities()
-            
+
 
     def search_funct(self, srch_trm):
         srch = requests.get(
@@ -61,6 +61,8 @@ class SearchTask():
         pairs = sorted(list(set(zip(self.entities["token"], wordfreq, self.entities["label"]))),key=take_second,reverse=False)
         for pair in pairs:
             print(pair)
+
+        return pairs
 
         #print("Found over "+str(c)+" articles.")
 '''
