@@ -59,10 +59,15 @@ class SearchTask():
         def take_second(elem):
             return elem[1]
         pairs = sorted(list(set(zip(self.entities["token"], wordfreq, self.entities["label"]))),key=take_second,reverse=False)
+        output = []
         for pair in pairs:
-            print(pair)
+            out = {"entity": pair[0],
+                   "frequency": pair[1],
+                   "type":pair[2]}
+            output.append(out)
+            print(out)
 
-        return pairs
+        return output
 
         #print("Found over "+str(c)+" articles.")
 '''
