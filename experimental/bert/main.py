@@ -43,8 +43,12 @@ if __name__ == "__main__":
         @app.route("/predict",methods=['POST'])
         def predict(task):
             text = request.args.get('q')
-            out = task.search_funct(text)
-            return jsonify({"result":out})
+            try:
+                out = task.search_funct(text)
+                return jsonify({"result":out})
+            except Exception as e:
+                print(e)
+                return jsonify({"result":"Model Failed"})
         
         app.run('0.0.0.0',port=6969)
         #task.recurrant_search()
