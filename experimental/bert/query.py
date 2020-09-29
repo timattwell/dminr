@@ -61,8 +61,8 @@ class SearchTask():
         pairs = sorted(list(set(zip(self.entities["token"], wordfreq, self.entities["label"]))),key=take_second,reverse=False)
         output = []
         for pair in pairs:
-            out = {"entity": pair[0],
-                   "frequency": pair[1],
+            out = {"ents": pair[0],
+                   "freq": pair[1],
                    "type":pair[2]}
             output.append(out)
             print(out)
