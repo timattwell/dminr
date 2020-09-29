@@ -65,7 +65,7 @@ class SearchTask():
                    "frequency": pair[1],
                    "type":pair[2]}
             output.append(out)
-            #print(out)
+            print(out)
 
         return output
 
