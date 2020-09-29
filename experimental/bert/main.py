@@ -40,7 +40,7 @@ if __name__ == "__main__":
         task = SearchTask(args, model, embeddings, tokenizer)
         
         app = Flask(__name__)
-        @app.route("/predict",methods=['POST'])
+        @app.route("/predict",methods=['GET'])
         def predict(task):
             text = request.args.get('q')
             try:
