@@ -42,7 +42,7 @@ if __name__ == "__main__":
         app = Flask(__name__)
         @app.route("/predict",methods=['GET'])
         def predict():
-            text = request.args.get('q')
+            text = str(request.args.get('q'))
             try:
                 out = task.search_funct(text)
                 return jsonify({"result":out})
